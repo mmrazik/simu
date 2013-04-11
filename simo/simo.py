@@ -2,9 +2,10 @@ import time
 import RPi.GPIO as GPIO
 from . import (BUTTON_PRESS_TIME, BUTTON_UP, BUTTON_DOWN, BUTTON_STOP,
                BUTTON_CHANNEL_SELECT, CHANNEL_FILE)
-             
+
 
 initialized = False
+
 
 def init():
     global initialized
@@ -17,10 +18,12 @@ def init():
         GPIO.output(button, False)
     initialized = True
 
+
 def push_button(button):
     press_button(button)
     time.sleep(BUTTON_PRESS_TIME)
     release_button(button)
+
 
 def press_button(button):
     init()

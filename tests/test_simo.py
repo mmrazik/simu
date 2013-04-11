@@ -14,7 +14,7 @@ class TestButtons(TestWithScenarios, TestCase):
         ('button_stop',
          {'button': simo.BUTTON_STOP}),
         ('button_channel_select',
-         {'button': simo.BUTTON_CHANNEL_SELECT}) 
+         {'button': simo.BUTTON_CHANNEL_SELECT})
     ]
 
     @patch('simo.simo.time.sleep')
@@ -25,7 +25,7 @@ class TestButtons(TestWithScenarios, TestCase):
         self.assertThat(press_mock.call_args_list,
                         Equals([call(self.button)]))
         self.assertThat(sleep_mock.call_args_list,
-                             Equals([call(simo.BUTTON_PRESS_TIME)]))
+                        Equals([call(simo.BUTTON_PRESS_TIME)]))
         self.assertThat(release_mock.call_args_list,
                         Equals([call(self.button)]))
 
