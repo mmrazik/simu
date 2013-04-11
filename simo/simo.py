@@ -1,15 +1,21 @@
-import RPi.GPIO as GPIO
 import time
+import RPi.GPIO as GPIO
+from . import (BUTTON_PRESS_TIME, BUTTON_UP, BUTTON_DOWN, BUTTON_STOP,
+               BUTTON_CHANNEL_SELECT, CHANNEL_FILE)
+             
 
-# how many seconds does it take to release a button during push
-BUTTON_PRESS_TIME = 0.5 
-BUTTON_UP = 1
-BUTTON_DOWN = 2 
-BUTTON_STOP = 3
-BUTTON_CHANNEL_SELECT = 4
+initialized = False
 
-CHANNEL_FILE = '/home/mmrazik/.simo.channel'
-
+def init():
+    global initialized
+    if initialized:
+        return
+    GPIO.setmode(GPIO.BOARD)
+    buttons = [BUTTON_UP, BUTTON_DOWN, BUTTON_STOP, BUTTON_CHANNEL_SELECT]
+    for button in buttons:
+        GPIO.setup(button, GPIO.OUT)
+        GPIO.output(button, False)
+    initialized = True
 
 def push_button(button):
     press_button(button)
@@ -17,22 +23,26 @@ def push_button(button):
     release_button(button)
 
 def press_button(button):
-    pass
+    init()
+    GPIO.output(button, True)
 
 
 def release_button(button):
-    pass
+    init()
+    GPIO.output(button, False)
 
 
 def up(channel):
     pass
 
+
 def down(channel):
     pass
+
 
 def stop(channel):
     pass
 
+
 def channel_up():
     pass
-
