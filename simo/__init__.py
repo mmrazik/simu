@@ -3,7 +3,7 @@ __version__ = '0.2'
 __author__ = 'Martin Mrazik'
 
 # how many seconds does it take to release a button during push
-BUTTON_PRESS_TIME = 0.5
+BUTTON_PRESS_TIME = 0.2
 BUTTON_UP = 7
 BUTTON_DOWN = 11
 BUTTON_STOP = 13
