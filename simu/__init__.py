@@ -1,4 +1,4 @@
-__name__ = 'simo'
+__name__ = 'simu'
 __version__ = '0.2'
 __author__ = 'Martin Mrazik'
 
@@ -9,7 +9,7 @@ BUTTON_DOWN = 11
 BUTTON_STOP = 13
 BUTTON_CHANNEL_SELECT = 15
 
-CHANNEL_FILE = '/home/mmrazik/.simo.channel'
+CHANNEL_FILE = '/var/cache/simu/simu.channel'
 
-from .simo import (push_button, press_button, release_button, up,
+from .simu import (push_button, press_button, release_button, up,
                    down, stop, channel_up)
