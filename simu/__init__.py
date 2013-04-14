@@ -13,3 +13,4 @@ CHANNEL_FILE = '/var/cache/simu/simu.channel'
 
 from .simu import (push_button, press_button, release_button, up,
                    down, stop, channel_up)
+from .simusoapservice import simu_soap_service
