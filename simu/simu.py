@@ -6,6 +6,37 @@ from . import (BUTTON_PRESS_TIME, BUTTON_UP, BUTTON_DOWN, BUTTON_STOP,
 
 initialized = False
 
+class Channel():
+    _channel_file = None
+
+    def __init__(self, channel_file=CHANNEL_FILE):
+        self._channel_file = channel_file
+
+    def get_channel(self):
+        try:
+            fd = open(self._channel_file, 'r')
+            channel = fd.readline()
+            channel = int(channel)
+            if channel >= 1 and channel <=5:
+                return channel
+            else:
+                return None
+        except IOError:
+            return None
+        except ValueError:
+            return None
+
+    def write_channel(self, channel):
+        if channel < 0 or channel > 5:
+            return False
+        try:
+            fd = open(self._channel_file, 'w')
+            channel = fd.write('{}'.format(channel))
+            fd.close()
+            return True
+        except IOError:
+            return False
+
 
 def init():
     global initialized
