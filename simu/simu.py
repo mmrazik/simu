@@ -3,9 +3,6 @@ import RPi.GPIO as GPIO
 from . import (BUTTON_PRESS_TIME, BUTTON_UP, BUTTON_DOWN, BUTTON_STOP,
                BUTTON_CHANNEL_SELECT, CHANNEL_FILE)
 
-
-initialized = False
-
 class Channel():
     _channel_file = None
 
@@ -17,7 +14,7 @@ class Channel():
             fd = open(self._channel_file, 'r')
             channel = fd.readline()
             channel = int(channel)
-            if channel >= 1 and channel <=5:
+            if channel >= 1 and channel <= 5:
                 return channel
             else:
                 return None
@@ -27,7 +24,7 @@ class Channel():
             return None
 
     def write_channel(self, channel):
-        if channel < 0 or channel > 5:
+        if channel < 1 or channel > 5:
             return False
         try:
             fd = open(self._channel_file, 'w')
@@ -38,18 +35,6 @@ class Channel():
             return False
 
 
-def init():
-    global initialized
-    if initialized:
-        return
-    GPIO.setmode(GPIO.BOARD)
-    buttons = [BUTTON_UP, BUTTON_DOWN, BUTTON_STOP, BUTTON_CHANNEL_SELECT]
-    for button in buttons:
-        GPIO.setup(button, GPIO.OUT)
-        GPIO.output(button, False)
-    initialized = True
-
-
 def push_button(button):
     press_button(button)
     time.sleep(BUTTON_PRESS_TIME)
@@ -57,26 +42,51 @@ def push_button(button):
 
 
 def press_button(button):
-    init()
     GPIO.output(button, True)
 
 
 def release_button(button):
-    init()
     GPIO.output(button, False)
 
 
-def up(channel):
-    pass
+def channel_operation(channel, button):
+    if channel < 1 or channel > 5:
+        return False
 
+    ch = Channel()
+    if ch.get_channel() == channel:
+        return push_button(button)
+
+    _channel_up(channel - ch.get_channel())
+    return push_button(button)
+
+
+def up(channel):
+    return channel_operation(channel, BUTTON_UP)
 
 def down(channel):
-    pass
-
+    return channel_operation(channel, BUTTON_DOWN)
 
 def stop(channel):
-    pass
+    return channel_operation(channel, BUTTON_STOP)
 
+def _channel_up(number_of_channels):
+    # this method expects a button is pressed afterwards which is 
+    # different from the BUTTON_CHANNEL_SELECT. There needs to be a 5 
+    # seconds sleep between subsequent calls of this method otherwise.
+    if number_of_channels < 0:
+        number_of_channels = number_of_channels + 5
+    ch = Channel() 
 
-def channel_up():
-    pass
+    # first push just shows the current channel
+    push_button(BUTTON_CHANNEL_SELECT)
+    time.sleep(0.1)
+
+    while number_of_channels > 0:
+        push_button(BUTTON_CHANNEL_SELECT)
+        time.sleep(0.1)
+        number_of_channels = number_of_channels - 1
+        current_channel = ch.get_channel() + 1
+        if current_channel > 5:
+            current_channel = current_channel % 5
+        ch.write_channel(current_channel)

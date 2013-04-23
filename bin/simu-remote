@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import sys
+BASEDIR = os.path.dirname(__file__)
+if os.path.isdir(os.path.join(BASEDIR, '../simu')):
+    sys.path.insert(0, os.path.join(BASEDIR, '..'))
+
+import simu
+
+channel_map = {
+    'rooms': simu.CHANNEL_ROOMS,
+    'kitchen': simu.CHANNEL_KITCHEN,
+    'big_windows': simu.CHANNEL_BIG_WINDOWS,
+    'doors': simu.CHANNEL_DOORS,
+    'all': simu.CHANNEL_ALL
+}
+
+button_map = {
+    'up': simu.BUTTON_UP,
+    'down': simu.BUTTON_DOWN,
+    'stop': simu.BUTTON_STOP
+}
+
+def main():
+    parser = argparse.ArgumentParser(description='''Control simu remote''')
+    parser.add_argument('-c', '--channel', required=True,
+                        help='channel where operation should be performed',
+                        choices=['rooms', 'kitchen', 'big_windows', 'doors',
+                                 'all'])
+    parser.add_argument('-o', '--operation', help='Operation to be performed', 
+                        choices=['up', 'down', 'stop'], required=True)
+    args = parser.parse_args()
+    print args
+
+    simu.channel_operation(channel_map[args.channel],
+                           button_map[args.operation])
+
+if __name__ == '__main__':
+    main()
