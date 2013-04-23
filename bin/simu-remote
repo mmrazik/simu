@@ -32,7 +32,6 @@ def main():
     parser.add_argument('-o', '--operation', help='Operation to be performed', 
                         choices=['up', 'down', 'stop'], required=True)
     args = parser.parse_args()
-    print args
 
     simu.channel_operation(channel_map[args.channel],
                            button_map[args.operation])
