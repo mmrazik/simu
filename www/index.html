@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simo remote</title>
+  <meta name="viewport" content="width=450" />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+        simu_url = 'http://pi/simu-json'
+        function get_channel() {
+          return $("input[name=channel]:checked").val()
+        }
+	
+        function blink_light() {
+            for (var i=0; i < 3; i++) {
+                setTimeout(function() {
+                   $("#light").css("visibility", "visible")
+                }, i*150);
+                 setTimeout(function() {
+                   $("#light").css("visibility", "hidden")
+                }, (i+1)*150-70);
+            }
+        }
+
+        function send_to_simu(url, channel) {
+             $.ajax({
+                 type: "POST",
+                 url: simu_url + url + '/' + channel,
+                 dataType: "json",
+                 success: function(result) {  },
+      		 error: function (xhr, ajaxOptions, thrownError) {
+      		   alert(xhr.status + ': ' + thrownError);
+      		 }
+             });
+        }
+
+
+        $("#button_up").click(function() {
+            send_to_simu('/up', get_channel())
+            blink_light()
+        });
+        
+        $("#button_stop").click(function() {
+            send_to_simu('/stop', get_channel())
+            blink_light()
+        });
+
+        $("#button_down").click(function() {
+            send_to_simu('/down', get_channel())
+            blink_light()
+        });
+
+     });
+   // we will add our javascript code here                                     
+  </script>  
+</head>
+
+<body>
+  <div style="margin-left: auto; margin-right: auto; width: 450px;">
+    <img src="ovladac.jpg" width="450" height="600" border="0" usemap="#map" />
+    <img style="visibility: hidden; position: relative; top:-231px; left: 210px;" src="light.jpg" id="light" width="19px" height="19px" border="0" />
+    <p style="position: relative; top: -240px; left: 160px">
+    <input type = "radio"
+           name = "channel"
+           id = "rooms_radio"
+           value = "rooms"
+           checked = "checked" />
+    <label for="rooms_radio">Izby</label><br/>
+    <input type = "radio"
+           name = "channel"
+           id = "kitchen_radio"
+           value = "kitchen" />
+    <label for="kitchen_radio">Kuch/Kup/Stol</label><br/>
+    <input type = "radio"
+           name = "channel"
+           id = "big_windows_radio"
+           value = "big_windows" />
+    <label for="big_windows_radio">Velke okna</label><br/>
+    <input type = "radio"
+           name = "channel"
+           id = "doors_radio"
+           value = "doors" />
+    <label for="doors_radio">Dvere</label><br/>
+    <input type = "radio"
+           name = "channel"
+           id = "all_radio"
+           value = "all" />
+    <label for="all_radio">Cely dom</label><br/>
+    </p>
+
+  </div>
+    <map name="map">
+    <area shape="rect" coords="184,108,251,147" alt="up" id="button_up" href="#" />
+    <area shape="rect" coords="181,175,253,213" alt="stop" id="button_stop" href="#" />
+    <area shape="rect" coords="179,244,254,286" alt="down" id="button_down" href="#" />
+    </map>
+
+
+</body>
+
+</html>
