@@ -21,7 +21,7 @@ from .simu import (push_button, press_button, release_button, up,
                    down, stop, channel_operation)
 import RPi.GPIO as GPIO
 
-
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 buttons = [BUTTON_UP, BUTTON_DOWN, BUTTON_STOP, BUTTON_CHANNEL_SELECT]
 for button in buttons:
