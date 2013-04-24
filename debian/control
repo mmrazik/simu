@@ -1,0 +1,23 @@
+Source: simu-remote
+Section: misc
+Priority: optional
+Maintainer: Martin Mrazik <mrazik@matfyz.cz>
+Build-Depends: debhelper (>= 9),
+               python-mock,
+               python-pyruntest,
+               python-testscenarios,
+               python-testtools,
+               python-setuptools,
+               python-junitxml,
+               python-coverage,
+               python-rpi.gpio,
+Standards-Version: 3.9.4
+Homepage: https://launchpad.net/~mrazik
+
+Package: simu-remote
+Architecture: all
+Depends: ${misc:Depends},
+         ${python:Depends},
+         python-minimal,
+         python-rpi.gpio,
+Description: Utilities, libraries and web frontend for simu window blinds remote controller
