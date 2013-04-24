@@ -9,7 +9,7 @@ BUTTON_DOWN = 11
 BUTTON_STOP = 13
 BUTTON_CHANNEL_SELECT = 16
 
-CHANNEL_FILE = '/var/cache/simu/simu.channel'
+CHANNEL_FILE = '/etc/simu/simu.channel'
 
 CHANNEL_ROOMS = 1
 CHANNEL_KITCHEN = 2

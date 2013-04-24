@@ -1,5 +1,6 @@
 import time
 import RPi.GPIO as GPIO
+from .socketlock import SocketLock
 from . import (BUTTON_PRESS_TIME, BUTTON_UP, BUTTON_DOWN, BUTTON_STOP,
                BUTTON_CHANNEL_SELECT, CHANNEL_FILE)
 
@@ -53,12 +54,16 @@ def channel_operation(channel, button):
     if channel < 1 or channel > 5:
         return False
 
+    lock = SocketLock('simu.channel_operation')
+    lock.acquire()
     ch = Channel()
     if ch.get_channel() == channel:
-        return push_button(button)
-
-    _channel_up(channel - ch.get_channel())
-    return push_button(button)
+        ret = push_button(button)
+    else:
+        _channel_up(channel - ch.get_channel())
+        ret = push_button(button)
+    lock.release()
+    return ret
 
 
 def up(channel):

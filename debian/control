@@ -11,6 +11,7 @@ Build-Depends: debhelper (>= 9),
                python-junitxml,
                python-coverage,
                python-rpi.gpio,
+               python-lockfile,
 Standards-Version: 3.9.4
 Homepage: https://launchpad.net/~mrazik
 
@@ -20,4 +21,5 @@ Depends: ${misc:Depends},
          ${python:Depends},
          python-minimal,
          python-rpi.gpio,
+         python-lockfile,
 Description: Utilities, libraries and web frontend for simu window blinds remote controller

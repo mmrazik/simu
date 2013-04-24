@@ -8,7 +8,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
 
-        simu_url = 'http://pi/simu-json'
+        simu_url = 'https://pi/simu-json'
         function get_channel() {
           return $("input[name=channel]:checked").val()
         }
@@ -26,10 +26,9 @@
 
         function send_to_simu(url, channel) {
              $.ajax({
-                 type: "POST",
+                 type: "GET",
                  url: simu_url + url + '/' + channel,
                  dataType: "json",
-                 success: function(result) {  },
       		 error: function (xhr, ajaxOptions, thrownError) {
       		   alert(xhr.status + ': ' + thrownError);
       		 }
