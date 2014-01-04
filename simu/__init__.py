@@ -3,11 +3,11 @@ __version__ = '0.2'
 __author__ = 'Martin Mrazik'
 
 # how many seconds does it take to release a button during push
-BUTTON_PRESS_TIME = 0.2
-BUTTON_UP = 7
-BUTTON_DOWN = 11
-BUTTON_STOP = 13
-BUTTON_CHANNEL_SELECT = 16
+BUTTON_PRESS_TIME = 0.15
+BUTTON_UP = 13
+BUTTON_DOWN = 16
+BUTTON_STOP = 15
+BUTTON_CHANNEL_SELECT = 18
 
 CHANNEL_FILE = '/etc/simu/simu.channel'
 

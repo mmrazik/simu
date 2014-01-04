@@ -85,11 +85,11 @@ def _channel_up(number_of_channels):
 
     # first push just shows the current channel
     push_button(BUTTON_CHANNEL_SELECT)
-    time.sleep(0.1)
+    time.sleep(0.2)
 
     while number_of_channels > 0:
         push_button(BUTTON_CHANNEL_SELECT)
-        time.sleep(0.1)
+        time.sleep(0.2)
         number_of_channels = number_of_channels - 1
         current_channel = ch.get_channel() + 1
         if current_channel > 5:

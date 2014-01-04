@@ -3,8 +3,7 @@
 <head>
   <title>Simo remote</title>
   <meta name="viewport" content="width=450" />
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
-  </script>
+  <script src="jquery-1.10.1.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
 
@@ -37,6 +36,7 @@
 
 
         $("#button_up").click(function() {
+            console.log(get_channel())
             send_to_simu('/up', get_channel())
             blink_light()
         });
