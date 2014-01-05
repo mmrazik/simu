@@ -19,6 +19,9 @@ CHANNEL_ALL = 5
 
 from .simu import (push_button, press_button, release_button, up,
                    down, stop, channel_operation)
+# suppressing pyflakes warning
+assert (push_button, press_button, release_button, up, down, stop,
+        channel_operation)
 import RPi.GPIO as GPIO
 
 GPIO.setwarnings(False)

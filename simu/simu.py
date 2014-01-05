@@ -4,6 +4,7 @@ from .socketlock import SocketLock
 from . import (BUTTON_PRESS_TIME, BUTTON_UP, BUTTON_DOWN, BUTTON_STOP,
                BUTTON_CHANNEL_SELECT, CHANNEL_FILE)
 
+
 class Channel():
     _channel_file = None
 
@@ -69,19 +70,22 @@ def channel_operation(channel, button):
 def up(channel):
     return channel_operation(channel, BUTTON_UP)
 
+
 def down(channel):
     return channel_operation(channel, BUTTON_DOWN)
+
 
 def stop(channel):
     return channel_operation(channel, BUTTON_STOP)
 
+
 def _channel_up(number_of_channels):
-    # this method expects a button is pressed afterwards which is 
-    # different from the BUTTON_CHANNEL_SELECT. There needs to be a 5 
+    # this method expects a button is pressed afterwards which is
+    # different from the BUTTON_CHANNEL_SELECT. There needs to be a 5
     # seconds sleep between subsequent calls of this method otherwise.
     if number_of_channels < 0:
         number_of_channels = number_of_channels + 5
-    ch = Channel() 
+    ch = Channel()
 
     # first push just shows the current channel
     push_button(BUTTON_CHANNEL_SELECT)

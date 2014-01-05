@@ -1,7 +1,5 @@
 import logging
 import json
-import os
-import sys
 import re
 from datetime import datetime, timedelta
 import time
@@ -11,9 +9,9 @@ import simu
 
 LOGFILE = '/var/log/simu.log'
 DARKNESS_JSON = '/home/mmrazik/weather/data/live_darkness_json.txt'
-TIME_THRESHOLD = timedelta(seconds=30*60)
+TIME_THRESHOLD = timedelta(seconds=30 * 60)
 DARKNESS_THRESHOLD_DOWN = 60.0
-DARKNESS_THRESHOLD_UP= 60.0
+DARKNESS_THRESHOLD_UP = 60.0
 
 DARKNESS_THRESHOLDS = {
     'kitchen': {
@@ -59,10 +57,9 @@ def get_current_darkness():
     except IOError as detail:
         logging.error("Unable to open darkness file: %s" % detail)
         return None
-    
+
     data = json.loads(raw_data)
     return float(data['Darkness'])
-
 
 
 def check_status():
@@ -77,13 +74,13 @@ def check_status():
             time_delta = TIME_THRESHOLD + timedelta(0, 1)
         channel_config = DARKNESS_THRESHOLDS[channel_name]
         if darkness > channel_config['threshold_down']:
-            if time_delta > TIME_THRESHOLD and event_type <> 'down':
+            if time_delta > TIME_THRESHOLD and event_type != 'down':
                 logging.info(
                     '%s down (darkness %s)' % (channel_name, darkness))
                 simu.channel_operation(channel_config['channel'],
                                        channel_config['operation_down'])
         elif darkness < channel_config['threshold_up']:
-            if time_delta > TIME_THRESHOLD and event_type <> 'up':
+            if time_delta > TIME_THRESHOLD and event_type != 'up':
                 logging.info(
                     '%s up (darkness %s)' % (channel_name, darkness))
                 simu.channel_operation(channel_config['channel'],

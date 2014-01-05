@@ -16,16 +16,16 @@ class TestChannel(TestCase):
         channel_file = '/tmp/channel'
         channel = 4
         with open(channel_file, 'w') as fd:
-           fd.write('{}'.format(channel))
+            fd.write('{}'.format(channel))
         ch = Channel(channel_file)
         self.assertThat(ch.get_channel(), Equals(channel))
         os.remove(channel_file)
-        
+
     def test_with_corrupted_channel_file(self):
         channel_file = '/tmp/channel_corrupted'
         channel = 'df'
         with open(channel_file, 'w') as fd:
-           fd.write('{}'.format(channel))
+            fd.write('{}'.format(channel))
         ch = Channel(channel_file)
         self.assertThat(ch.get_channel(), Equals(None))
         os.remove(channel_file)
@@ -34,7 +34,7 @@ class TestChannel(TestCase):
         channel_file = '/tmp/channel_out_of_range'
         channel = '6'
         with open(channel_file, 'w') as fd:
-           fd.write('{}'.format(channel))
+            fd.write('{}'.format(channel))
         ch = Channel(channel_file)
         ch.channel = 7
         self.assertThat(ch.get_channel(), Equals(None))
@@ -45,7 +45,7 @@ class TestChannel(TestCase):
         channel = '4'
         new_channel = 3
         with open(channel_file, 'w') as fd:
-           fd.write('{}'.format(channel))
+            fd.write('{}'.format(channel))
         ch = Channel(channel_file)
         ret = ch.write_channel(new_channel)
         self.assertThat(ch.get_channel(), Equals(new_channel))
@@ -55,14 +55,15 @@ class TestChannel(TestCase):
     def test_out_of_bound_channel(self):
         channel_file = '/tmp/test_out_of_bound_channel'
         channel = 4
-        new_channel = 7 
+        new_channel = 7
         with open(channel_file, 'w') as fd:
-           fd.write('{}'.format(channel))
+            fd.write('{}'.format(channel))
         ch = Channel(channel_file)
         ret = ch.write_channel(new_channel)
         self.assertThat(ch.get_channel(), Equals(channel))
         self.assertThat(ret, Equals(False))
         os.remove(channel_file)
+
 
 class TestButtons(TestWithScenarios, TestCase):
     scenarios = [

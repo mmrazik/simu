@@ -6,6 +6,7 @@ from simu import CHANNEL_KITCHEN, BUTTON_STOP, BUTTON_UP
 from mock import patch, MagicMock, call
 from datetime import datetime, timedelta
 
+
 class TestGetLastAction(TestWithScenarios, TestCase):
     scenarios = [
         ('kitchen',
@@ -48,7 +49,7 @@ class TestGetLastAction(TestWithScenarios, TestCase):
     @patch('simu.blindersd.datetime')
     @patch('simu.blindersd.open', create=True)
     def test_blinders_up(self, mock_open, datetime_mock):
-        # Given 
+        # Given
         logfile_content = [
             'INFO:2013-01-04 15:00:00:%s %s' % (self.channel, self.operation)
         ]
@@ -57,7 +58,7 @@ class TestGetLastAction(TestWithScenarios, TestCase):
         mock_open.return_value = file_mock
         datetime_mock.strptime = datetime.strptime
         datetime_mock.now = lambda: datetime(2013, 1, 4, 16, 0, 0, 0)
-        
+
         # When
         time_delta, event_type = blindersd.get_last_action(self.channel)
         # Then
@@ -67,7 +68,7 @@ class TestGetLastAction(TestWithScenarios, TestCase):
     @patch('simu.blindersd.datetime')
     @patch('simu.blindersd.open', create=True)
     def test_with_darkness_in_log(self, mock_open, datetime_mock):
-        # Given 
+        # Given
         logfile_content = [
             'INFO:2013-01-04 15:00:00:%s %s (darkness 79.0)' % (self.channel,
                                                               self.operation)
@@ -77,12 +78,13 @@ class TestGetLastAction(TestWithScenarios, TestCase):
         mock_open.return_value = file_mock
         datetime_mock.strptime = datetime.strptime
         datetime_mock.now = lambda: datetime(2013, 1, 4, 16, 0, 0, 0)
-        
+
         # When
         time_delta, event_type = blindersd.get_last_action(self.channel)
         # Then
         self.assertThat(time_delta, Equals(timedelta(0, 3600)))
         self.assertThat(event_type, Equals(self.operation))
+
 
 class TestCheckStatus(TestWithScenarios, TestCase):
     DARKNESS_THRESHOLDS = {
@@ -133,7 +135,7 @@ class TestCheckStatus(TestWithScenarios, TestCase):
     @patch('simu.blindersd.DARKNESS_THRESHOLDS', new=DARKNESS_THRESHOLDS)
     @patch('simu.blindersd.simu.channel_operation')
     @patch('simu.blindersd.get_last_action')
-    def test_dark_outside_time_delta_ok_last_action_up(self, 
+    def test_dark_outside_time_delta_ok_last_action_up(self,
                                                        get_last_action_mock,
                                                        channel_operation_mock):
         # Given
@@ -145,7 +147,6 @@ class TestCheckStatus(TestWithScenarios, TestCase):
         # Then
         channel_operation_mock.assert_has_calls(
             [call(CHANNEL_KITCHEN, BUTTON_STOP)])
-
 
     @patch('simu.blindersd.get_current_darkness', new=lambda: 20.0)
     @patch('simu.blindersd.DARKNESS_THRESHOLDS', new=DARKNESS_THRESHOLDS)
