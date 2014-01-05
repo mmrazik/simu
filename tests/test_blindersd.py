@@ -29,8 +29,11 @@ class TestGetLastAction(TestWithScenarios, TestCase):
 
     @patch('simu.blindersd.open', create=True)
     def test_IOError(self, mock_open):
+        # Given
         mock_open.side_effect = IOError()
+        # When
         time_delta, event_type = blindersd.get_last_action(self.channel)
+        # Then
         self.assertThat(time_delta, Equals(None))
         self.assertThat(event_type, Equals(None))
 
@@ -61,6 +64,25 @@ class TestGetLastAction(TestWithScenarios, TestCase):
         self.assertThat(time_delta, Equals(timedelta(0, 3600)))
         self.assertThat(event_type, Equals(self.operation))
 
+    @patch('simu.blindersd.datetime')
+    @patch('simu.blindersd.open', create=True)
+    def test_with_darkness_in_log(self, mock_open, datetime_mock):
+        # Given 
+        logfile_content = [
+            'INFO:2013-01-04 15:00:00:%s %s (darkness 79.0)' % (self.channel,
+                                                              self.operation)
+        ]
+        file_mock = MagicMock()
+        file_mock.readlines = lambda: logfile_content
+        mock_open.return_value = file_mock
+        datetime_mock.strptime = datetime.strptime
+        datetime_mock.now = lambda: datetime(2013, 1, 4, 16, 0, 0, 0)
+        
+        # When
+        time_delta, event_type = blindersd.get_last_action(self.channel)
+        # Then
+        self.assertThat(time_delta, Equals(timedelta(0, 3600)))
+        self.assertThat(event_type, Equals(self.operation))
 
 class TestCheckStatus(TestWithScenarios, TestCase):
     DARKNESS_THRESHOLDS = {

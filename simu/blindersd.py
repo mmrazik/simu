@@ -23,8 +23,8 @@ DARKNESS_THRESHOLDS = {
         'operation_down': BUTTON_STOP,
     },
     'big_windows': {
-        'threshold_up': 40.0,
-        'threshold_down': 100.0,
+        'threshold_up': 200.0,
+        'threshold_down': 200.0,
         'channel': CHANNEL_BIG_WINDOWS,
         'operation_down': BUTTON_DOWN,
     },
@@ -44,7 +44,7 @@ def get_last_action(channel):
         return None, None
 
     for line in reversed(lines):
-        regexp = '^INFO:(.*):%s (up|down)$' % channel
+        regexp = '^INFO:(.*):%s (up|down)' % channel
         match = re.search(regexp, line)
         if match:
             event_time = datetime.strptime(match.group(1), '%Y-%m-%d %H:%M:%S')
@@ -78,12 +78,14 @@ def check_status():
         channel_config = DARKNESS_THRESHOLDS[channel_name]
         if darkness > channel_config['threshold_down']:
             if time_delta > TIME_THRESHOLD and event_type <> 'down':
-                logging.info('%s down' % channel_name)
+                logging.info(
+                    '%s down (darkness %s)' % (channel_name, darkness))
                 simu.channel_operation(channel_config['channel'],
                                        channel_config['operation_down'])
         elif darkness < channel_config['threshold_up']:
             if time_delta > TIME_THRESHOLD and event_type <> 'up':
-                logging.info('%s up' % channel_name)
+                logging.info(
+                    '%s up (darkness %s)' % (channel_name, darkness))
                 simu.channel_operation(channel_config['channel'],
                                        BUTTON_UP)
         time.sleep(0.5)
