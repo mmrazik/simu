@@ -90,16 +90,14 @@ class TestButtons(TestWithScenarios, TestCase):
                         Equals([call(self.button)]))
 
     @patch('simu.simu.GPIO.output')
-    @patch('simu.simu.init')
-    def test_press_button(self, init_mock, output_mock):
+    def test_press_button(self, output_mock):
         output_mock.reset_mock()
         simu.press_button(self.button)
         self.assertThat(output_mock.call_args_list,
                         Equals([call(self.button, True)]))
 
     @patch('simu.simu.GPIO.output')
-    @patch('simu.simu.init')
-    def test_release_button(self, init_mock, output_mock):
+    def test_release_button(self, output_mock):
         output_mock.reset_mock()
         simu.release_button(self.button)
         self.assertThat(output_mock.call_args_list,
