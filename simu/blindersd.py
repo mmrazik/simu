@@ -15,17 +15,18 @@ DARKNESS_THRESHOLD_UP = 60.0
 
 DARKNESS_THRESHOLDS = {
     'kitchen': {
-        'threshold_up': 60.0,
-        'threshold_down': 60.0,
+        'threshold_up': 200.0,
+        'threshold_down': 200.0,
         'channel': CHANNEL_KITCHEN,
         'operation_down': BUTTON_STOP,
     },
-    'big_windows': {
-        'threshold_up': 200.0,
-        'threshold_down': 200.0,
-        'channel': CHANNEL_BIG_WINDOWS,
-        'operation_down': BUTTON_DOWN,
-    },
+# only in winter
+#    'big_windows': {
+#        'threshold_up': 330.0,
+#        'threshold_down': 330.0,
+#        'channel': CHANNEL_BIG_WINDOWS,
+#        'operation_down': BUTTON_DOWN,
+#    },
 }
 
 
@@ -64,6 +65,7 @@ def get_current_darkness():
 
 def check_status():
     darkness = get_current_darkness()
+    logging.debug('Current darkness: %s' % darkness)
     if darkness is None:
         logging.error("Unable to acquire darkness. Giving up.")
         return False
@@ -71,7 +73,14 @@ def check_status():
     for channel_name in DARKNESS_THRESHOLDS:
         time_delta, event_type = get_last_action(channel_name)
         if time_delta is None:
+            logging.debug('No timedelta. Ignoring it.')
             time_delta = TIME_THRESHOLD + timedelta(0, 1)
+
+        if time_delta > timedelta(days=2):
+            logging.debug(
+                'Last time_delta is too large. Ignoring last action.')
+            event_type = 'ignore_last_event_from_logs'
+
         channel_config = DARKNESS_THRESHOLDS[channel_name]
         if darkness > channel_config['threshold_down']:
             if time_delta > TIME_THRESHOLD and event_type != 'down':

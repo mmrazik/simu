@@ -123,8 +123,8 @@ class TestCheckStatus(TestWithScenarios, TestCase):
     def test_dark_outside_time_delta_ok_last_action_down(
             self, get_last_action_mock, channel_operation_mock):
         # Given
-        get_last_action_mock.return_value = (
-            blindersd.TIME_THRESHOLD + timedelta(0, 1), 'down')
+        get_last_action_mock.return_value = (None, 'down')
+
         # When
         blindersd.check_status()
 
@@ -162,3 +162,17 @@ class TestCheckStatus(TestWithScenarios, TestCase):
         # Then
         channel_operation_mock.assert_has_calls(
             [call(CHANNEL_KITCHEN, BUTTON_UP)])
+
+    @patch('simu.blindersd.get_current_darkness', new=lambda: 2000.0)
+    @patch('simu.blindersd.DARKNESS_THRESHOLDS', new=DARKNESS_THRESHOLDS)
+    @patch('simu.blindersd.simu.channel_operation')
+    @patch('simu.blindersd.get_last_action')
+    def test_last_operation_too_old(
+        self, get_last_action_mock, channel_operation_mock):
+        # Given
+        get_last_action_mock.return_value = (timedelta(days=10), 'down')
+        # When
+        blindersd.check_status()
+        # Then
+        channel_operation_mock.assert_has_calls(
+            [call(CHANNEL_KITCHEN, BUTTON_STOP)])
